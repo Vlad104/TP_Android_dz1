@@ -11,7 +11,7 @@ import android.graphics.Color;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DataAdapter extends RecyclerView.Adapter<RecyclerFragment.ViewHolder> {
+public class DataAdapter extends RecyclerView.Adapter<ViewHolder> {
     private List<Integer> _data;
     private IEventListener _clickListener;
 
@@ -26,15 +26,15 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerFragment.ViewHolde
 
     @NonNull
     @Override
-    public RecyclerFragment.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_list, parent, false);
 
-        return new RecyclerFragment.ViewHolder(view, _clickListener);
+        return new ViewHolder(view, _clickListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerFragment.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.getTextView().setText(_data.get(position).toString());
         holder.getTextView().setTextColor(getColor(position + 1));
     }

@@ -6,24 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-import android.content.res.Configuration;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.res.Configuration;
 
 public class RecyclerFragment extends Fragment {
-    private int _listSize;
+    public static final String LIST_SIZE = "LIST_SIZE";
+    private int _listSize = 100;
     private IEventListener clickListener;
 
     @Override
     public void onAttach(Context context) {
-        clickListener = (IEventListener) context;
-
         super.onAttach(context);
+        clickListener = (IEventListener) context;
     }
 
     @Nullable
@@ -36,9 +35,8 @@ public class RecyclerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            _listSize = bundle.getInt(MainActivity.LIST_SIZE);
+        if (savedInstanceState != null) {
+            _listSize = savedInstanceState.getInt(LIST_SIZE);
         }
 
         final DataAdapter adapter = new DataAdapter(_listSize, clickListener);
@@ -52,7 +50,7 @@ public class RecyclerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 adapter.addNumber();
-                clickListener.onChangeContent();
+                _listSize += 1;
             }
         });
     }
@@ -60,7 +58,7 @@ public class RecyclerFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(MainActivity.LIST_SIZE, _listSize);
+        outState.putInt(LIST_SIZE, _listSize);
     }
 
     @Override
@@ -73,28 +71,6 @@ public class RecyclerFragment extends Fragment {
         int orientation = getResources().getConfiguration().orientation;
 
         return  (orientation == Configuration.ORIENTATION_PORTRAIT) ? 3 : 4;
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView _textView;
-        private IEventListener _clickListener;
-
-        public ViewHolder(@NonNull View itemView, IEventListener clickListener) {
-            super(itemView);
-            _clickListener = clickListener;
-            _textView = itemView.findViewById(R.id.item_list);
-
-            _textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int number = Integer.parseInt(_textView.getText().toString());
-                    _clickListener.onNumberClick(number);
-                }
-            });
-        }
-
-        public TextView getTextView() {
-            return _textView;
-        }
+//        return  (getResources().getBoolean(R.orientation.is_portrait)) ? 3 : 4;
     }
 }
