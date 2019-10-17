@@ -2,14 +2,15 @@ package com.example.tp_android_dz1;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.TextView;
 
-public class ViewHolder extends RecyclerView.ViewHolder {
+class ViewHolder extends RecyclerView.ViewHolder {
     private TextView _textView;
     private IEventListener _clickListener;
 
-    public ViewHolder(@NonNull View itemView, IEventListener clickListener) {
+    ViewHolder(@NonNull View itemView, IEventListener clickListener) {
         super(itemView);
         _clickListener = clickListener;
         _textView = itemView.findViewById(R.id.item_list);
@@ -17,13 +18,21 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         _textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int number = Integer.parseInt(_textView.getText().toString());
+                int number = getCurrentNumber(_textView);
                 _clickListener.onNumberClick(number);
             }
         });
     }
 
-    public TextView getTextView() {
+    TextView getTextView() {
         return _textView;
+    }
+
+    private int getCurrentNumber(TextView textView) {
+        try {
+            return Integer.parseInt(textView.getText().toString());
+        } catch (Exception e){
+            return 0;
+        }
     }
 }

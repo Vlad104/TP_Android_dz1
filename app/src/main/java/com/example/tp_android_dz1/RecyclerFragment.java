@@ -12,10 +12,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.content.res.Configuration;
+
+import java.util.Objects;
 
 public class RecyclerFragment extends Fragment {
-    public static final String LIST_SIZE = "LIST_SIZE";
+    private static final String LIST_SIZE = "LIST_SIZE";
     private int _listSize = 100;
     private IEventListener clickListener;
 
@@ -41,11 +42,12 @@ public class RecyclerFragment extends Fragment {
 
         final DataAdapter adapter = new DataAdapter(_listSize, clickListener);
 
-        RecyclerView recyclerView = getView().findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getView().getContext(), spanCount()));
         recyclerView.setAdapter(adapter);
 
-        Button button = getView().findViewById(R.id.add_button);
+        Button button;
+        button = getView().findViewById(R.id.add_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,9 +70,6 @@ public class RecyclerFragment extends Fragment {
     }
 
     private int spanCount() {
-        int orientation = getResources().getConfiguration().orientation;
-
-        return  (orientation == Configuration.ORIENTATION_PORTRAIT) ? 3 : 4;
-//        return  (getResources().getBoolean(R.orientation.is_portrait)) ? 3 : 4;
+        return getResources().getInteger((R.integer.columns));
     }
 }
